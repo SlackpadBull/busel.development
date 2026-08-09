@@ -21,8 +21,9 @@ body {
   font-family: "Manrope", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
-a { color: var(--accent); }
-a:hover { color: var(--surface); }
+a { 
+  color: var(--accent);
+  text-decoration: none;}
 button, input, textarea { font: inherit; }
 .container { width: min(calc(100% - 64px), var(--container)); margin: 0 auto; }
 
