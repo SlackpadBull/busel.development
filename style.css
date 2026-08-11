@@ -140,7 +140,7 @@ h1 {
 }
 .window {
     padding: 9px;
-    border: 1px solid #d8d8d2;
+    border: 6px solid #202020;
     border-radius: 27px;
     background: #e8e8e3;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.1);
@@ -3359,13 +3359,21 @@ body {
 
 .site-footer {
     display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 420px;
     align-items: center;
-    margin-top: 26px;
-    padding-top: 18px;
-    border-top: 1px solid #ececec;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+    padding: 18px;
+    background-color: #e8e8e3;
+}
+
+.wrapper-footer-ws {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 420px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .footer-line {
