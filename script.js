@@ -112,7 +112,7 @@ revealTargets.forEach((el, index) => {
 })
 
 const heroPreview = document.querySelector('.hero-preview')
-const heroWindow = document.querySelector('.window')
+const heroWindow = heroPreview?.querySelector('.window') || document.querySelector('.window')
 
 if (heroPreview && heroWindow) {
     const observer = new IntersectionObserver(
@@ -133,6 +133,44 @@ if (heroPreview && heroWindow) {
     )
 
     observer.observe(heroPreview)
+}
+
+const productAnimatedElements = document.querySelectorAll(
+    '.product-showcase .window, ' +
+    '.product-showcase .crm-stats, ' +
+    '.product-showcase .dot, ' +
+    '.product-showcase .phone, ' +
+    '.product-showcase .phone-balance, ' +
+    '.product-showcase .phone-stats, ' +
+    '.product-showcase .site-art, ' +
+    '.product-showcase .chart-bars, ' +
+    '.product-showcase .floating-card'
+)
+
+if (productAnimatedElements.length > 0) {
+    if ('IntersectionObserver' in window) {
+        const productObserver = new IntersectionObserver(
+            (entries, observer) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return
+                    entry.target.classList.add('animate')
+                    observer.unobserve(entry.target)
+                })
+            },
+            {
+                threshold: 0.2,
+                rootMargin: '0px 0px -60px 0px',
+            },
+        )
+
+        productAnimatedElements.forEach(el => {
+            productObserver.observe(el)
+        })
+    } else {
+        productAnimatedElements.forEach(el => {
+            el.classList.add('animate')
+        })
+    }
 }
 
 if (window.matchMedia('(pointer:fine)').matches) {
@@ -247,3 +285,42 @@ document.querySelectorAll('.metric').forEach((card, index) => {
 document.querySelectorAll('.chart-card').forEach(card => {
     card.style.transitionDelay = '1050ms'
 })
+
+/* Копирование email в буфер обмена */
+const copyEmailBtn = document.getElementById('copyEmailBtn')
+
+if (copyEmailBtn) {
+    let copyTimer = null
+    copyEmailBtn.addEventListener('click', async () => {
+        const email = copyEmailBtn.getAttribute('data-email') || 'slackpadbull@gmail.com'
+
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(email)
+            } else {
+                const tempTextArea = document.createElement('textarea')
+                tempTextArea.value = email
+                tempTextArea.style.position = 'fixed'
+                tempTextArea.style.left = '-9999px'
+                tempTextArea.style.top = '0'
+                document.body.appendChild(tempTextArea)
+                tempTextArea.focus()
+                tempTextArea.select()
+                document.execCommand('copy')
+                document.body.removeChild(tempTextArea)
+            }
+
+            // Перезапуск анимации вылета
+            copyEmailBtn.classList.remove('copied')
+            void copyEmailBtn.offsetWidth // force reflow
+            copyEmailBtn.classList.add('copied')
+
+            if (copyTimer) clearTimeout(copyTimer)
+            copyTimer = setTimeout(() => {
+                copyEmailBtn.classList.remove('copied')
+            }, 1450)
+        } catch (err) {
+            console.error('Ошибка копирования почты:', err)
+        }
+    })
+}
